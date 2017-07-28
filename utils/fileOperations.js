@@ -18,28 +18,28 @@ module.exports = {
 
     },
 
-    removeFile: function(path) {
-        fs.unlinkSync(path);
+    removeFile: function(filePath) {
+        fs.unlinkSync(filePath);
     },
 
-    removeDirRecursive: function(path) {
+    removeDirRecursive: function(dirPath) {
 
         var _this = this;
 
-        fs.readdirSync(path).forEach(function(file) {
+        fs.readdirSync(dirPath).forEach(function(file) {
 
-            var curPath = path + "/" + file;
+            var curPath = dirPath + "/" + file;
 
             if(fs.statSync(curPath).isDirectory()) {
                 _this.removeDirRecursive(curPath);
             }
             else {
-                _this.removeFile(path);
+                _this.removeFile(curPath);
             }
 
         });
 
-        fs.rmdirSync(path);
+        fs.rmdirSync(dirPath);
     }
 
 }
