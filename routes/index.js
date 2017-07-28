@@ -8,6 +8,7 @@ var multer  = require('multer');
 var routes = express.Router();
 var dateformat = require('../utils/dateformat');
 var pathResolver = require('../utils/pathresolver');
+var fileOperations = require('../utils/fileOperations');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -126,12 +127,11 @@ routes.post('/upload', upload.any(), function (req, res, next) {
 
 routes.post('/remove', upload.any(), function (req, res, next) {
 
-  for(var i = 0, l = req.body.items.length; i < l; i++){
+  for(var i = 0, l = req.body.items.length; i < l; i++) {
     var filePath = path.join(pathResolver.baseDir(req), req.body.items[i]);
-    var promise = fs.unlinkAsync(filePath);
+    fileOperations.remove(filePath);
   }
 
-  // promise = promise.then(function() {
   res.status(200);
   res.send({
     "result": {
@@ -139,19 +139,7 @@ routes.post('/remove', upload.any(), function (req, res, next) {
       "error": null
     }
   });
-  // });
 
-  // promise = promise.catch(function(err) {
-  //   res.status(500);
-  //   res.send({
-  //     "result": {
-  //       "success": false,
-  //       "error": err
-  //     }
-  //   });
-  // });
-
-  return promise;
 });
 
 routes.post('/createFolder', upload.any(), function (req, res, next) {
